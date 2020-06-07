@@ -10,14 +10,21 @@
         // This is a SIDE EFFECT, and we use the useEffect hook for that 
 
         const rootElement = document.getElementById('root')
-        function Greeting() {
-            const [name, newName] = React.useState( window.localStorage.getItem('name') || '')
+
+        function useLocalStorageState(key, defaultValue = '') {
+            const [state, newState] = React.useState( window.localStorage.getItem(key) || defaultValue)
 
             React.useEffect(() => {
                 // Update the document title using the browser API
-                window.localStorage.setItem('name', name)
-            });
+                window.localStorage.setItem(key, state)
+            }, [key, state]);
 
+            return [state, newState]
+        }
+        function Greeting() {
+
+            const [name, newName] = useLocalStorageState('name')
+            
             const handleChange = (event) => newName(event.target.value)
 
             return (
