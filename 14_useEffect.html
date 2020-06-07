@@ -8,18 +8,23 @@
         // We want to be  able to save the value of name into local storage
         // This allows us to retain the value even on refresh
         // This is a SIDE EFFECT, and we use the useEffect hook for that 
-        
+
         const rootElement = document.getElementById('root')
         function Greeting() {
-            const [name, newName] = React.useState('')
+            const [name, newName] = React.useState( window.localStorage.getItem('name') || '')
+
+            React.useEffect(() => {
+                // Update the document title using the browser API
+                window.localStorage.setItem('name', name)
+            });
 
             const handleChange = (event) => newName(event.target.value)
 
             return (
                 <div>
                     <form>
-                        <label htmlFor="name">Name: </label>
-                        <input id="name" onChange={handleChange}/>
+                        <label htmlFor="name" >Name: </label>
+                        <input id="name" value={name} onChange={handleChange}/>
                     </form>
                     {name ? name : 'Please type your name'}
                 </div>
